@@ -35,6 +35,38 @@
     [bubbleImageView setFrame:CGRectMake((self.imageView.frame.size.width / 2), self.imageView.frame.origin.y, 5, 5)];
     [self.view addSubview:bubbleImageView];
     
+    UIBezierPath * bubblePath = [self getBubblePath];
+    CAKeyframeAnimation * keyAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
+    keyAnimation.duration = 2.0;
+    keyAnimation.path = bubblePath.CGPath;
+    keyAnimation.removedOnCompletion = true;
+    keyAnimation.fillMode = kCAFillModeForwards;
+    
+    [self.imageView.layer addAnimation:keyAnimation forKey:@"movingAnimation"];
+    
+    
+    
+}
+
+-(UIBezierPath *)getBubblePath
+{
+    UIBezierPath * zigzagPath = [[UIBezierPath alloc]init];
+    
+    CGFloat ox = _imageView.frame.origin.x;
+    CGFloat oy = _imageView.frame.origin.y;
+    
+    CGFloat ex = ox;
+    CGFloat ey = oy - 40;
+    
+    CGFloat t = 20;
+    CGPoint cp1 = CGPointMake(ox - t , (ey + oy)/2);
+    CGPoint cp2 = CGPointMake(ox + t, cp1.y);
+    
+    [zigzagPath moveToPoint:(CGPointMake(ox, oy))];
+    [zigzagPath addCurveToPoint:CGPointMake(ex, ey) controlPoint1:cp1 controlPoint2:cp2];
+    
+    
+    return zigzagPath;
 }
 
 
